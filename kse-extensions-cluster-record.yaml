@@ -6,4 +6,4 @@ metadata:
   namespace: kubesphere-system
 data:
   common: host
-  dmp: ""
+  dmp: host

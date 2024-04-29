@@ -44,7 +44,8 @@ sed -i "s/REPLACE_ME_COMMON/$common/g" kse-extensions/kustomization.yaml
 sed -i "s/REPLACE_ME_DMP/$dmp/g" kse-extensions/kustomization.yaml
 
 # 使用 kustomize build 生成 kse-extensions-installplan.yaml
-kustomize build kse-extensions | kubectl apply -f -
+kubectl kustomize build kse-extensions
+kubectl kustomize build kse-extensions | kubectl apply -f -
 
 # 等待所有的 InstallPlan Ready
 kubectl wait --for=condition=Installed --timeout=120s installplan --all
