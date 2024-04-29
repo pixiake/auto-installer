@@ -25,7 +25,7 @@ dmp=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonp
 # 添加 CLUSTER_NAME 到 common
 if [ -z "$common" ]; then
   common=$CLUSTER_NAME
-else
+elif [[ ! $common =~ (^|,)$CLUSTER_NAME(,|$) ]]; then
   common=$common,$CLUSTER_NAME
 fi
 
@@ -34,7 +34,7 @@ if [ "$ENABLE_DMP" == "true" ]; then
   # 添加 CLUSTER_NAME 到 dmp
   if [ -z "$dmp" ]; then
     dmp=$CLUSTER_NAME
-  else
+  elif [[ ! $dmp =~ (^|,)$CLUSTER_NAME(,|$) ]]; then
     dmp=$dmp,$CLUSTER_NAME
   fi
 fi
