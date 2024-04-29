@@ -15,6 +15,9 @@ if [ -z "$IMAGE_REGISTRY" ]; then
   exit 1
 fi
 
+# 设置 KUBECONFIG 为 host 集群的 kubeconfig
+KUBECONFIG=clusters/host/host-kubeconfig.yaml
+
 current_dir=$(cd $(dirname $0); pwd)
 
 # 1. 创建 cluster
@@ -33,8 +36,8 @@ spec:
   config: $config
   connection:
     type: direct
-    kubeconfig: $(cat ${current_dir}/../${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml | base64 -w 0)
+    kubeconfig: $(cat clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml | base64 -w 0)
 EOF
 
 # 2. 等待 cluster Ready
-kubectl wait --for=condition=Ready --timeout=120s cluster/test
+kubectl wait cluster/${CLUSTER_NAME} --for=condition=Ready --timeout=120s

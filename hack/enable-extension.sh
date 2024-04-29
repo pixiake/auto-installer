@@ -15,6 +15,9 @@ if [ -z "$ENABLE_DMP" ]; then
   exit 1
 fi
 
+# 设置 KUBECONFIG 为 host 集群的 kubeconfig
+KUBECONFIG=clusters/host/host-kubeconfig.yaml
+
 # 获取 kse-extensions-cluster-record
 common=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonpath='{.data.common}')
 dmp=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonpath='{.data.dmp}')
