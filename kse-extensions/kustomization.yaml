@@ -28,7 +28,7 @@ patches:
       group: kubesphere.io
       version: v1alpha1
       kind: InstallPlan
-      annotationSelector: kubesphere.io/installation-mode="multi-cluster"
+      annotationSelector: kubesphere.io/installation-mode=Multicluster
     patch: |-
       - op: replace
         path: /spec/clusterScheduling/placement/clusters
