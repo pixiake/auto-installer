@@ -43,3 +43,13 @@ patches:
       - op: replace
         path: /spec/clusterScheduling/placement/clusters
         value: [REPLACE_ME_DMP]
+
+  - target:
+      group: kubesphere.io
+      version: v1alpha1
+      kind: InstallPlan
+      name: devops
+    patch:
+      - op: replace
+        path: /spec/clusterScheduling/placement/clusters
+        value: [host]

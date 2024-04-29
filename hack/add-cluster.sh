@@ -18,8 +18,6 @@ fi
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
 KUBECONFIG=clusters/host/host-kubeconfig.yaml
 
-current_dir=$(cd $(dirname $0); pwd)
-
 # 1. 创建 cluster
 config=$(cat <<EOF | base64 -w 0
 global:
