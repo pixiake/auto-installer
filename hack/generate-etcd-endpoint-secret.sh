@@ -9,7 +9,7 @@ if [ -z "$CLUSTER_NAME" ]; then
 fi
 
 # 设置 KUBECONFIG 为新建集群的 kubeconfig
-KUBECONFIG=clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml
+export KUBECONFIG=clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml
 
 # 1. 创建 etcd-endpoint-secret-generator job
 kubectl apply -f etcd-endpoint-secret-generator.yaml

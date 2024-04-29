@@ -16,7 +16,7 @@ if [ -z "$IMAGE_REGISTRY" ]; then
 fi
 
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
-KUBECONFIG=clusters/host/host-kubeconfig.yaml
+export KUBECONFIG=clusters/host/host-kubeconfig.yaml
 
 # 1. 创建 cluster
 config=$(cat <<EOF | base64 -w 0
