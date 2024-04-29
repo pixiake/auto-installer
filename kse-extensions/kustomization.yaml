@@ -29,7 +29,7 @@ patches:
       version: v1alpha1
       kind: InstallPlan
       annotationSelector: kubesphere.io/installation-mode="Multicluster"
-    patch:
+    patch: |-
       - op: replace
         path: /spec/clusterScheduling/placement/clusters
         value: [REPLACE_ME_COMMON]
@@ -39,7 +39,7 @@ patches:
       version: v1alpha1
       kind: InstallPlan
       name: dmp
-    patch:
+    patch: |-
       - op: replace
         path: /spec/clusterScheduling/placement/clusters
         value: [REPLACE_ME_DMP]
@@ -49,7 +49,7 @@ patches:
       version: v1alpha1
       kind: InstallPlan
       name: devops
-    patch:
+    patch: |-
       - op: replace
         path: /spec/clusterScheduling/placement/clusters
         value: [host]
