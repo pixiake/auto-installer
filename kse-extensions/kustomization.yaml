@@ -1,0 +1,45 @@
+resources:
+  - dmp
+  - devops
+  - gatekeeper
+  - gateway
+#  - kubeedge
+#  - kubefed
+  - metrics-server
+  - network
+  - openpitrix
+  - opensearch
+#  - servicemesh
+#  - springcloud
+  - storage-utils
+#  - tower
+  - vector
+  - whizard-alerting
+  - whizard-auditing
+  - whizard-events
+  - whizard-logging
+  - whizard-monitoring
+  - whizard-notification
+  - whizard-telemetry
+  - whizard-telemetry-ruler
+
+patches:
+  - target:
+      group: kubesphere.io
+      version: v1alpha1
+      kind: InstallPlan
+      annotationSelector: kubesphere.io/installation-mode="Multicluster"
+    patch:
+      - op: replace
+        path: /spec/clusterScheduling/placement/clusters
+        value: [REPLACE_ME_COMMON]
+
+  - target:
+      group: kubesphere.io
+      version: v1alpha1
+      kind: InstallPlan
+      name: dmp
+    patch:
+      - op: replace
+        path: /spec/clusterScheduling/placement/clusters
+        value: [REPLACE_ME_DMP]
