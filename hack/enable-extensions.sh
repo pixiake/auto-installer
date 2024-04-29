@@ -47,7 +47,7 @@ sed -i "s/REPLACE_ME_DMP/$dmp/g" kse-extensions/kustomization.yaml
 kubectl kustomize kse-extensions | kubectl apply -f -
 
 # 等待所有的 InstallPlan Ready
-kubectl wait --for=condition=Installed --timeout=120s installplan --all
+kubectl wait --for=condition=Installed --timeout=600s installplan --all
 
 # 使用 kubectl patch 更新 kse-extensions-cluster-record
 kubectl patch cm kse-extensions-cluster-record -n kubesphere-system --type merge -p "{\"data\":{\"common\":\"$common\",\"dmp\":\"$dmp\"}}"
