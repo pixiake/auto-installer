@@ -9,14 +9,20 @@ if [ -z "$CLUSTER_NAME" ]; then
   exit 1
 fi
 
-# 如果没有传入 ENABLE_DMP 退出
-if [ -z "$ENABLE_DMP" ]; then
-  echo "Usage: ENABLE_DMP=<enable-dmp> ./add-cluster.sh"
+# 如果没有传入 CLUSTER_ROLE 退出，CLUSTER_ROLE 可以是 member、host 或 dmp 之一
+if [ -z "$CLUSTER_ROLE" ]; then
+  echo "Usage: CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
   exit 1
 fi
 
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
 export KUBECONFIG=clusters/host/host-kubeconfig.yaml
+
+# 检查 kse-extensions-cluster-record 是否存在
+if ! kubectl get cm kse-extensions-cluster-record -n kubesphere-system &> /dev/null; then
+  echo "check configmap kse-extensions-cluster-record failed"
+  exit 1
+fi
 
 # 获取 kse-extensions-cluster-record
 common=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonpath='{.data.common}')
@@ -29,8 +35,8 @@ elif [[ ! $common =~ (^|,)$CLUSTER_NAME(,|$) ]]; then
   common=$common,$CLUSTER_NAME
 fi
 
-# 如果 ENABLE_DMP 为 true, 则添加 dmp
-if [ "$ENABLE_DMP" == "true" ]; then
+# 如果 CLUSTER_ROLE 为 dmp, 则添加 dmp
+if [ "$CLUSTER_ROLE" == "dmp" ]; then
   # 添加 CLUSTER_NAME 到 dmp
   if [ -z "$dmp" ]; then
     dmp=$CLUSTER_NAME

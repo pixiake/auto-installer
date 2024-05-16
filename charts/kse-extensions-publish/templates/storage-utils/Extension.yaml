@@ -1,0 +1,28 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: Extension
+metadata:
+  creationTimestamp: null
+  labels:
+    kubesphere.io/category: storage
+    kubesphere.io/managed: "true"
+  name: storage-utils
+spec:
+  created: "2024-05-15T09:18:26Z"
+  description:
+    en: This extension contains multiple storage utilities
+    zh: 这个扩展组件包含多个与存储有关的实用工具
+  displayName:
+    en: KubeSphere Storage
+    zh: KubeSphere 存储
+  icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8xMTFfMzk5NSkiPgo8cGF0aCBkPSJNMTk2LjA5NCAyMS40NTE3SDMuOTA1NzZWODguNzE3NEgxOTYuMDk0VjIxLjQ1MTdaIiBmaWxsPSIjNTVCQzhBIi8+CjxwYXRoIGQ9Ik00Ni42MjgzIDQyLjc2NzFINTkuOTcxMlY2Ny40MDAySDQ2LjYyODNWNDIuNzY3MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik03Ny43NjE4IDQyLjc2NzFIOTEuMTA0N1Y2Ny40MDAySDc3Ljc2MThWNDIuNzY3MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMDguODk1IDQyLjc2NzFIMTIyLjIzOFY2Ny40MDAySDEwOC44OTVWNDIuNzY3MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xNDAuMDI5IDQyLjc2NzFIMTUzLjM3MlY2Ny40MDAySDE0MC4wMjlWNDIuNzY3MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xOTYuMDkzIDIxLjQ1MTdIMTc2Ljg3NFY4OC43MTc0SDE5Ni4wOTNWMjEuNDUxN1oiIGZpbGw9IiMzMjQ1NTgiLz4KPHBhdGggZD0iTTIzLjEyNDYgMjEuNDUxN0gzLjkwNTc2Vjg4LjcxNzRIMjMuMTI0NlYyMS40NTE3WiIgZmlsbD0iIzMyNDU1OCIvPgo8cGF0aCBkPSJNMTk2LjA5MyAxMTEuMjg1SDMuOTA1MjdWMTc4LjU1MUgxOTYuMDkzVjExMS4yODVaIiBmaWxsPSIjOTlEN0I5Ii8+CjxwYXRoIGQ9Ik0xOTYuMDkzIDExMS4yODVIMTc2Ljg3NFYxNzguNTUxSDE5Ni4wOTNWMTExLjI4NVoiIGZpbGw9IiMzMjQ1NTgiLz4KPHBhdGggZD0iTTIzLjEyNDEgMTExLjI4NUgzLjkwNTI3VjE3OC41NTFIMjMuMTI0MVYxMTEuMjg1WiIgZmlsbD0iIzMyNDU1OCIvPgo8cGF0aCBkPSJNOTguNzczOSAxMzguMjMySDQ2LjYyODNWMTUxLjYwMkg5OC43NzM5VjEzOC4yMzJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTU1LjkxOSAxNDQuOTE3QzE1NS45MTkgMTM2Ljk4MSAxNDkuNDg1IDEzMC41NDggMTQxLjU0OSAxMzAuNTQ4QzEzMy42MTMgMTMwLjU0OCAxMjcuMTggMTM2Ljk4MSAxMjcuMTggMTQ0LjkxN0MxMjcuMTggMTUyLjg1MyAxMzMuNjEzIDE1OS4yODYgMTQxLjU0OSAxNTkuMjg2QzE0OS40ODUgMTU5LjI4NiAxNTUuOTE5IDE1Mi44NTMgMTU1LjkxOSAxNDQuOTE3WiIgZmlsbD0id2hpdGUiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8xMTFfMzk5NSI+CjxyZWN0IHg9IjMuOTA1NzYiIHk9IjIxLjQ1MTciIHdpZHRoPSIxOTIuMTg4IiBoZWlnaHQ9IjE1Ny4wOTciIHJ4PSI4LjIxMTAzIiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=
+  provider:
+    en:
+      email: kubesphere@yunify.com
+      name: QingCloud Technologies
+      url: https://kubesphere.co/
+    zh:
+      email: kubesphere@yunify.com
+      name: 北京青云科技股份有限公司
+      url: https://kubesphere.com.cn/
+status:
+  recommendedVersion: '{{ .Values.storage_utils.version }}'

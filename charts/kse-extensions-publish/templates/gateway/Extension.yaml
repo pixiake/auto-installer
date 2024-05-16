@@ -1,0 +1,28 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: Extension
+metadata:
+  creationTimestamp: null
+  labels:
+    kubesphere.io/category: networking
+    kubesphere.io/managed: "true"
+  name: gateway
+spec:
+  created: "2024-05-15T09:18:25Z"
+  description:
+    en: 'The KubeSphere Gateway is an extension component that aggregates services and manages external access to the KubeSphere platform. It has formed a gateway system with three types of resource management dimensions: "cluster, project, enterprise space," helping enterprises achieve full coverage of network configurations at various levels.'
+    zh: KubeSphere 网关是聚合服务、管理 KubeSphere 平台外部访问的扩展组件，现已形成“集群、项目、企业空间”三类资源管理维度的网关体系，帮助企业实现各层级网络配置的全覆盖。
+  displayName:
+    en: KubeSphere Gateway
+    zh: KubeSphere 网关
+  icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijk5Ljk5OTgiIGN5PSI5OS45OTk4IiByPSI4NS4yNTQ3IiBmaWxsPSIjNTVCQzhBIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTAxLjU4OCAxODUuMjRDMTQ3Ljk0IDE4NC4zOTMgMTg1LjI1NSAxNDYuNTU0IDE4NS4yNTUgOTkuOTk5OUMxODUuMjU1IDUzLjQ0NTcgMTQ3Ljk0IDE1LjYwNjcgMTAxLjU4OCAxNC43NTk2VjE4NS4yNFoiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuNCIvPgo8bWFzayBpZD0ibWFzazBfNDNfMjE3OCIgc3R5bGU9Im1hc2stdHlwZTphbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMTQiIHk9IjE0IiB3aWR0aD0iMTcyIiBoZWlnaHQ9IjE3MiI+CjxjaXJjbGUgY3g9Ijk5Ljk5OTgiIGN5PSI5OS45OTk4IiByPSI4NS4yNTQ3IiBmaWxsPSIjNTVCQzhBIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrMF80M18yMTc4KSI+CjxwYXRoIGQ9Ik01MS4yNTE3IDY4LjUzOTRMODIuNzEyNCAxMDBMNTEuMjUxNyAxMzEuNDYxVjExMi41ODRIMTMuNDk5Vjg3LjQxNThINTEuMjUxN1Y2OC41Mzk0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE1MS45MjYgMTEyLjU4NFYxMzEuNDYxTDEyMC40NjUgMTAwTDE1MS45MjYgNjguNTM5NFY4Ny40MTU4SDE4OS42NzlWMTEyLjU4NEgxNTEuOTI2WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTg5LjAwNDcgNDYuMjA1N0g3MC4xMjg0TDEwMS41ODkgMTQuNzQ1MUwxMzMuMDUgNDYuMjA1N0gxMTQuMTczVjgzLjk1ODVIODkuMDA0N1Y0Ni4yMDU3WiIgZmlsbD0iIzMyNDU1OCIvPgo8cGF0aCBkPSJNODkuMDA0NyAxNTMuNzhINzAuMTI4NEwxMDEuNTg5IDE4NS4yNEwxMzMuMDUgMTUzLjc4SDExNC4xNzNWMTE2LjAyN0g4OS4wMDQ3VjE1My43OFoiIGZpbGw9IiMzMjQ1NTgiLz4KPHBhdGggZD0iTTUxLjI1MTcgNjguMzIwN0w4Mi43MTI0IDk5Ljc4MTNMNTEuMjUxNyAxMzEuMjQyVjExMi4zNjZIMTMuNDk5Vjg3LjE5NzFINTEuMjUxN1Y2OC4zMjA3WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE1MS45MjYgMTEyLjM2NlYxMzEuMjQyTDEyMC40NjUgOTkuNzgxM0wxNTEuOTI2IDY4LjMyMDdWODcuMTk3MUgxODkuNjc5VjExMi4zNjZIMTUxLjkyNloiIGZpbGw9IndoaXRlIi8+CjwvZz4KPC9zdmc+Cg==
+  provider:
+    en:
+      email: kubesphere@yunify.com
+      name: QingCloud Technologies
+      url: https://kubesphere.co/
+    zh:
+      email: kubesphere@yunify.com
+      name: 北京青云科技股份有限公司
+      url: https://kubesphere.com.cn/
+status:
+  recommendedVersion: '{{ .Values.gateway.version }}'

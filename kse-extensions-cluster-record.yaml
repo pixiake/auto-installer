@@ -5,5 +5,5 @@ metadata:
   name: kse-extensions-cluster-record
   namespace: kubesphere-system
 data:
-  common: host
-  dmp: host
+  common: ""
+  dmp: ""

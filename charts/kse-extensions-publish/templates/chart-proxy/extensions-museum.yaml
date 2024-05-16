@@ -1,0 +1,75 @@
+{{- if .Values.museum.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: extensions-museum
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: extensions-museum
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: extensions-museum
+  template:
+    metadata:
+      labels:
+        app: extensions-museum
+    spec:
+{{- include "extensions_museum.imagePullSecrets" . | nindent 6 }}
+      containers:
+        - name: extensions-museum
+          image: {{ template "extensions_museum.image" . }}
+          command:
+            - "/chartmuseum"
+            - "--storage-local-rootdir"
+            - "/charts"
+            - "--storage"
+            - "local"
+            - "--tls-cert"
+            - "/etc/certs/tls.crt"
+            - "--tls-key"
+            - "/etc/certs/tls.key"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/certs/
+      volumes:
+        - name: certs
+          secret:
+            secretName: extensions-museum-certs
+
+---
+
+{{- $ca := genCA "self-signed-ca" 3650 }}
+{{- $cn := printf "%s-extensions-museum" .Release.Name }}
+{{- $altName1 := printf "extensions-museum.%s" .Release.Namespace }}
+{{- $altName2 := printf "extensions-museum.%s.svc" .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca }}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: extensions-museum-certs
+  namespace: {{ .Release.Namespace }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ b64enc $cert.Cert }}
+  tls.key: {{ b64enc $cert.Key }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: extensions-museum
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: extensions-museum
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+{{end}}

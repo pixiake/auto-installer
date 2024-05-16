@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: v4.1.0-20240515-1
+description: A Helm chart for kse-extensions
+name: kse-extensions-publish
+type: application
+version: v4.1.0-20240515-1

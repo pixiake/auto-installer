@@ -1,0 +1,28 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: Extension
+metadata:
+  creationTimestamp: null
+  labels:
+    kubesphere.io/category: dev-tools
+    kubesphere.io/managed: "true"
+  name: openpitrix
+spec:
+  created: "2024-05-15T09:18:25Z"
+  description:
+    en: KubeSphere is based on OpenPitrix's self-developed multi-cloud application management platform, which is used to upload, review and manage different types of applications in multi-cloud environments.
+    zh: KubeSphere 基于 OpenPitrix 自研的多云应用管理平台，用于上传、审核并管理多云环境中不同类型的应用。
+  displayName:
+    en: KubeSphere app store management
+    zh: KubeSphere 应用商店管理
+  icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTcwLjAyMSAxNTAuNzkxVjE3My44NzFMMTQ0LjU3OCAxNzMuODY2VjEzOC4zMDFMMTcwLjAyMSAxNTAuNzkxWiIgZmlsbD0iI0VEQUQzQiIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTg4Ljg2NjYgOTMuNDEzMUg1NS40NTgxVjUwLjcyNTZIODguODY2NkM5MS45Nzc1IDUwLjcyNTYgOTQuNjkyOSA1MS4zMDU2IDk3LjAyNTQgNTIuNDczMUM5OS4zNTc5IDUzLjYzNTYgMTAxLjI2NyA1NS4xOTA2IDEwMi43NTQgNTcuMTMwNkMxMDQuMjQzIDU5LjA3MDYgMTA1LjM0NCA2MS4zMzMxIDEwNi4wNTggNjMuOTIwNkMxMDYuNzY4IDY2LjUwODEgMTA3LjEyNiA2OS4yMjU2IDEwNy4xMjYgNzIuMDY4MUMxMDcuMTI2IDc0Ljc4NTYgMTA2Ljc2OCA3Ny40MzgxIDEwNi4wNTggODAuMDIzMUMxMDUuMzQ0IDgyLjYxNTYgMTA0LjI0MyA4NC45MDgxIDEwMi43NTQgODYuOTEzMUMxMDEuMjY3IDg4LjkxODEgOTkuMzU3OSA5MC41MDMxIDk3LjAyNTQgOTEuNjY1NkM5NC42OTI5IDkyLjgyODEgOTEuOTc3NSA5My40MTMxIDg4Ljg2NjYgOTMuNDEzMVpNMTA3LjAyOSAyOC44MDA2QzEwMS43ODMgMjYuNDcwNiA5NS43MzE1IDI1LjMwODEgODguODY2NiAyNS4zMDgxSDMwLjAxNTZWMTczLjg3MUg1NS40NTgxVjExNy4yNzhIODguODY2NkM5NS45ODkzIDExNy4yNzggMTAyLjE3MSAxMTYuMDE2IDEwNy40MTcgMTEzLjQ5NkMxMTIuNjYyIDExMC45NzMgMTE3LjAzNCAxMDcuNjA4IDEyMC41MjggMTAzLjQwNkMxMjQuMDI0IDk5LjIwMDYgMTI2LjYxNSA5NC4yODU2IDEyOC4yOTkgODguNjU4MUMxMjkuOTc4IDgzLjAzMzEgMTMwLjgyNCA3Ny4xMTMxIDEzMC44MjQgNzAuOTA1NkMxMzAuODI0IDY0LjU2ODEgMTI5LjkxOCA1OC42MTU2IDEyOC4xMDEgNTMuMDUzMUMxMjYuMjg3IDQ3LjQ5MzEgMTIzLjYzNyA0Mi42NDMxIDEyMC4xNCAzOC41MDA2QzExNi42NDQgMzQuMzYzMSAxMTIuMjcyIDMxLjEzMDYgMTA3LjAyOSAyOC44MDA2Wk0xNDQuNTc4IDI1LjMwODZWMTEyLjIyNEwxNzAuMDIxIDEyNC43MTlWMjUuMzA4NkgxNDQuNTc4WiIgZmlsbD0iIzRDMzc5MiIvPgo8L3N2Zz4K
+  provider:
+    en:
+      email: kubesphere@yunify.com
+      name: QingCloud Technologies
+      url: https://kubesphere.co/
+    zh:
+      email: kubesphere@yunify.com
+      name: 北京青云科技股份有限公司
+      url: https://kubesphere.com.cn/
+status:
+  recommendedVersion: '{{ .Values.openpitrix.version }}'

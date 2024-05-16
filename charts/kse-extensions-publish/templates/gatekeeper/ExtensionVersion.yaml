@@ -1,0 +1,39 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: ExtensionVersion
+metadata:
+  creationTimestamp: null
+  labels:
+    kubesphere.io/category: security
+    kubesphere.io/extension-ref: gatekeeper
+  name: gatekeeper-{{ .Values.gatekeeper.version }}
+spec:
+  category: security
+  created: "2024-05-15T09:18:25Z"
+  description:
+    en: Gatekeeper is a security policy management tool based on OPA
+    zh: Gatekeeper 是一个基于 OPA 的安全策略管理工具
+  displayName:
+    en: Gatekeeper
+    zh: Gatekeeper
+  docs: https://docs.kubesphere.com.cn/
+  home: https://kubesphere.com.cn/
+  icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA1NiA1NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTIuNSAxNi45MTdjMC00LjY2Ny04Ljc1LTE1LjE2Ny05LjMzMy0xNS43NSAyLjA5OCA5LjQ0NCAxLjgzNyA4LjAzNCAyLjE4OCAxMS4wNS4wOTMuNzk1LjEzMiAxLjYyLS4xODYgMi4zNTUtMS40NTcgMy4zNjUtNi42NyA1LjI2LTYuNjcgNS4yNmw4LjE2NiA3UzUyLjUgMjEgNTIuNSAxNi45MTh6bS00OSAwYzAtNC42NjcgOC43NS0xNS4xNjcgOS4zMzMtMTUuNzUtMi4wOTggOS40NDQtMS44MzggOC4wMzQtMi4xODggMTEuMDUtLjA5My43OTUtLjEzMiAxLjYyLjE4NiAyLjM1NSAxLjQ1NyAzLjM2NSA2LjY3IDUuMjYgNi42NyA1LjI2bC04LjE2NiA3UzMuNSAyMSAzLjUgMTYuOTE4eiIgZmlsbD0iI0JGQkZCRiIvPjxwYXRoIGQ9Ik0yOCAxMi4yNWM5LjE0NCAwIDE1Ljc4NCA2LjQyNyAxOC42NjcgMTQuNTgzdjE0cy01LjgzNCAyLjMzNC05LjMzNCA0LjY2N2MtMy41IDIuMzMzLTguNzUgOS4zMzMtOC43NSA5LjMzM0gyOFYxMi4yNXoiIGZpbGw9IiM1NjYzNjYiLz48cGF0aCBkPSJNMjggMTIuMjVjLTkuMTQ0IDAtMTUuNzg0IDYuNDI3LTE4LjY2NyAxNC41ODN2MTRzNS44MzQgMi4zMzQgOS4zMzQgNC42NjdjMy41IDIuMzMzIDguNzUgOS4zMzMgOC43NSA5LjMzM0gyOFYxMi4yNXoiIGZpbGw9IiM3RDkxOTkiLz48Y2lyY2xlIGN4PSIyOCIgY3k9IjI2LjgzMyIgcj0iMi4zMzMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=
+  installationMode: Multicluster
+  keywords:
+    - security
+    - gatekeeper
+    - opa
+    - admission webhook
+  ksVersion: '>=4.0.0-0'
+  kubeVersion: '>=1.19.0-0'
+  provider:
+    en:
+      email: kubesphere@yunify.com
+      name: QingCloud Technologies
+      url: https://kubesphere.co/
+    zh:
+      email: kubesphere@yunify.com
+      name: 北京青云科技股份有限公司
+      url: https://kubesphere.com.cn/
+  version: '{{ .Values.gatekeeper.version }}'
+  chartURL: '{{ include "proxy-chart.repository" ( dict "name" "gatekeeper" "version" .Values.gatekeeper.version "Values" .Values "Release" .Release ) }}'

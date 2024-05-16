@@ -1,0 +1,119 @@
+{{/*
+Create remoteURL for proxy-regitry
+*/}}
+{{- define "proxy-registry.remoteURL" -}}
+{{- printf "%s://" .Values.oci.scheme -}}{{- (split "/" .Values.oci.repository)._0 }}
+{{- end }}
+
+{{/*
+Create the chartURL for proxy-registry
+*/}}
+{{- define "proxy-chart.repository" -}}
+{{- if .Values.museum.enabled }}
+{{- printf "https://extensions-museum.%s.svc/charts/%s-%s.tgz" .Release.Namespace .name .version }}
+{{- else if .Values.oci.registry.enabled }}
+{{- printf "oci://registry.%s.svc%s/%s:%s" .Release.Namespace (trimPrefix (split "/" .Values.oci.repository)._0 .Values.oci.repository) .name .version }}
+{{- else }}
+{{- printf "oci://%s/%s:%s" .Values.oci.repository .name .version }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the registry config
+*/}}
+{{- define "regitry.config" -}}
+{{- if .Values.oci.registry.enabled }}
+version: 0.1
+log:
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :5000
+  tls:
+    certificate: /etc/certs/tls.crt
+    key: /etc/certs/tls.key
+  headers:
+    X-Content-Type-Options: [nosniff]
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+proxy:
+  remoteurl: {{ include "proxy-registry.remoteURL" . }}
+{{- if .Values.oci.username }}
+  username: {{ .Values.oci.username }}
+{{- end }}
+{{- if .Values.oci.password }}
+  password: {{ .Values.oci.password  }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "common.images.image" -}}
+{{- $registryName := .global.imageRegistry -}}
+{{- $repositoryName := .imageRoot.repository -}}
+{{- $separator := ":" -}}
+{{- $termination := .global.tag | toString -}}
+{{- if .imageRoot.registry }}
+    {{- $registryName = .imageRoot.registry -}}
+{{- end -}}
+{{- if .imageRoot.tag }}
+    {{- $termination = .imageRoot.tag | toString -}}
+{{- end -}}
+{{- if .imageRoot.digest }}
+    {{- $separator = "@" -}}
+    {{- $termination = .imageRoot.digest | toString -}}
+{{- end -}}
+{{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
+{{- end -}}
+
+{{- define "common.images.pullSecrets" -}}
+  {{- $pullSecrets := list }}
+
+  {{- if .global }}
+    {{- range .global.imagePullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- range .images -}}
+    {{- range .pullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if (not (empty $pullSecrets)) }}
+imagePullSecrets:
+    {{- range $pullSecrets }}
+  - name: {{ . }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
+{{/*
+Registry Image
+*/}}
+{{- define "registry.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.oci.registry.image "global" .Values.global) }}
+{{- end -}}
+
+{{- define "registry.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.oci.registry.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+extensions-museum Image
+*/}}
+{{- define "extensions_museum.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.museum.image "global" .Values.global) }}
+{{- end -}}
+
+{{- define "extensions_museum.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.museum.image) "global" .Values.global) -}}
+{{- end -}}

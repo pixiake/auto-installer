@@ -15,17 +15,37 @@ if [ -z "$IMAGE_REGISTRY" ]; then
   exit 1
 fi
 
+# 如果没有传入 CLUSTER_ROLE 退出，CLUSTER_ROLE 可以是 member、host 或 dmp 之一
+if [ -z "$CLUSTER_ROLE" ]; then
+  echo "Usage: CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
+  exit 1
+fi
+
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
 export KUBECONFIG=clusters/host/host-kubeconfig.yaml
 
-# 1. 创建 cluster
-config=$(cat <<EOF | base64 -w 0
+function member_cluster() {
+  # 1. 创建 cluster
+  config=$(cat <<EOF | base64 -w 0
 global:
   imageRegistry: ${IMAGE_REGISTRY}
+apiserver:
+  image:
+    tag: "v4.1.0-20240506-1"
+console:
+  image:
+    tag: "v4.1.0-20240508-1"
+controller:
+  image:
+    tag: "v4.1.0-20240506-1"
+upgrade:
+  enabled: false
+cloud:
+  enabled: false
 EOF
-)
+  )
 
-cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl apply -f -
 apiVersion: cluster.kubesphere.io/v1alpha1
 kind: Cluster
 metadata:
@@ -37,5 +57,36 @@ spec:
     kubeconfig: $(cat clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml | base64 -w 0)
 EOF
 
-# 2. 等待 cluster Ready
-kubectl wait cluster/${CLUSTER_NAME} --for=condition=Ready --timeout=120s
+  # 2. 等待 cluster Ready
+  kubectl wait cluster/${CLUSTER_NAME} --for=condition=Ready --timeout=120s
+}
+
+function host_cluster() {
+  # 1. 安装 ks-core
+  helm upgrade --install -n kubesphere-system --create-namespace ks-core charts/ks-core \
+       --debug \
+       --wait \
+       --set global.imageRegistry=${IMAGE_REGISTRY},extension.imageRegistry=${IMAGE_REGISTRY}
+
+  # 2. 发布扩展组件
+  helm template -n kubesphere-system charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
+
+  # 3. 检查并创建 configmap kse-extensions-cluster-record
+  if ! kubectl get cm kse-extensions-cluster-record -n kubesphere-system &> /dev/null; then
+      # 如果不存在则创建
+      kubectl create cm kse-extensions-cluster-record -n kubesphere-system --from-literal=common="" --from-literal=dmp=""
+  fi
+}
+
+# 如果 CLUSTER_ROLE 为 member, 则执行 member cluster 任务
+if [ "$CLUSTER_ROLE" == "member" ]; then
+  member_cluster
+fi
+
+# 如果 CLUSTER_ROLE 为 host, 则执行 host cluster 任务
+if [ "$CLUSTER_ROLE" == "host" ]; then
+  host_cluster
+fi
+
+# 更新 Application CRD
+#kubectl apply -f crds/application.kubesphere.io_applications.yaml

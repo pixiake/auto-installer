@@ -1,0 +1,81 @@
+{{- if .Values.oci.registry.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+{{- include "registry.imagePullSecrets" . | nindent 6 }}
+      containers:
+        - name: registry
+          image: {{ template "registry.image" . }}
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: config
+              mountPath: /etc/docker/registry/
+            - name: certs
+              mountPath: /etc/certs/
+      volumes:
+        - name: config
+          secret:
+            secretName: registry-config
+        - name: certs
+          secret:
+            secretName: registry-certs
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-config
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  config.yml: {{ b64enc ( include "regitry.config" . ) }}
+
+---
+
+{{- $ca := genCA "self-signed-ca" 3650 }}
+{{- $cn := printf "%s-registry" .Release.Name }}
+{{- $altName1 := printf "registry.%s" .Release.Namespace }}
+{{- $altName2 := printf "registry.%s.svc" .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca }}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-certs
+  namespace: {{ .Release.Namespace }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ b64enc $cert.Cert }}
+  tls.key: {{ b64enc $cert.Key }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: registry
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 5000
+{{- end }}

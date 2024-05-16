@@ -1,0 +1,28 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: Extension
+metadata:
+  creationTimestamp: null
+  labels:
+    kubesphere.io/category: computing
+    kubesphere.io/managed: "true"
+  name: kubefed
+spec:
+  created: "2024-05-15T09:18:25Z"
+  description:
+    en: Application Management for Cluster Federation is an extension aimed at simplifying the management of applications across federated Kubernetes clusters. It offers a unified interface for deploying, updating, and managing applications across federated clusters with flexible configuration options to meet diverse needs.
+    zh: 联邦集群应用管理是一个旨在简化跨多个联邦 Kubernetes 集群管理应用程序的扩展组件，用户可以轻松地在多个联邦集群中部署、更新和管理应用程序，同时提供灵活的配置选项以满足不同需求。
+  displayName:
+    en: Application Management for Cluster Federation
+    zh: 联邦集群应用管理
+  icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNOTkuNTM2MSAxMy43ODYxTDE3NC4xOTggNTYuODkyM0wxNDIuMjc4IDc1LjMyMTJMNjcuNjE3NSAzMi4yMTU4TDU2Ljc5MjIgMzguNDY1OEw4OC43MDg1IDU2Ljg5MjdMNTYuNzkyNCA3NS4zMTk0TDY3LjYxNzcgODEuNTY5NEw5OS41MzM4IDYzLjE0MjdMMTMxLjQ1MyA4MS41NzEyTDk5LjUzNjEgOTkuOTk4NUwyNC44NzQxIDU2Ljg5MjNMOTkuNTM2MSAxMy43ODYxWiIgZmlsbD0iIzk5RDdCOSIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTI0Ljg3NDkgNTYuODk1TDk5LjUzNjkgMTAwLjAwMUw5OS41MzY5IDE4Ni4yMTRMNjcuNjE4NSAxNjcuNzg1TDY3LjYxODUgMTMwLjkyOUw5OS41MzYxIDE0OS4zNTdMOTkuNTM2MSAxMzYuODU3TDY3LjYxODUgMTE4LjQyOUw2Ny42MTg1IDgxLjU3MzVMNTYuNzkzMiA3NS4zMjM1TDU2Ljc5MzIgMTYxLjUzNUwyNC44NzQ5IDE0My4xMDdMMjQuODc0OSA1Ni44OTVaIiBmaWxsPSIjODBDREE3Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNOTkuNTM2MSAxMDBMMTc0LjE5OCA1Ni44OTQzTDE3NC4xOTggMTQzLjEwN0w5OS41MzYxIDE4Ni4yMTNMOTkuNTM2MSAxNDkuMzU2TDE3NC4xOTcgMTA2LjI1TDE3NC4xOTcgOTMuNzUwNUwxNDIuMjc5IDExMi4xNzhMMTQyLjI3OSA3NS4zMjRMMTMxLjQ1NCA4MS41NzRMMTMxLjQ1NCAxMTguNDI4TDk5LjUzNjEgMTM2Ljg1Nkw5OS41MzYxIDEwMFoiIGZpbGw9IiM1NUJDOEEiLz4KPHBhdGggZD0iTTE3My4yODYgNDguNzk3NEwxMDcuMDAyIDEwLjUyODRDMTAyLjM4MiA3Ljg2MDkxIDk2LjY4OTMgNy44NjA5IDkyLjA2OTEgMTAuNTI4NEwyNS43ODUyIDQ4Ljc5NzRDMjEuMTY1MSA1MS40NjQ4IDE4LjMxODkgNTYuMzk0NSAxOC4zMTg5IDYxLjcyOTRWMTM4LjI2N0MxOC4zMTg5IDE0My42MDIgMjEuMTY1IDE0OC41MzIgMjUuNzg1MiAxNTEuMTk5TDkyLjA2OTEgMTg5LjQ2OUM5Ni42ODkzIDE5Mi4xMzYgMTAyLjM4MiAxOTIuMTM2IDEwNy4wMDIgMTg5LjQ2OUwxNzMuMjg2IDE1MS4xOTlDMTc3LjkwNiAxNDguNTMyIDE4MC43NTIgMTQzLjYwMiAxODAuNzUyIDEzOC4yNjdWNjEuNzI5NEMxODAuNzUyIDU2LjM5NDUgMTc3LjkwNiA1MS40NjQ4IDE3My4yODYgNDguNzk3NFoiIHN0cm9rZT0iIzMyNDU1OCIgc3Ryb2tlLXdpZHRoPSIxMy43NSIvPgo8L3N2Zz4K
+  provider:
+    en:
+      email: kubesphere@yunify.com
+      name: QingCloud Technologies
+      url: https://kubesphere.co/
+    zh:
+      email: kubesphere@yunify.com
+      name: 北京青云科技股份有限公司
+      url: https://kubesphere.com.cn/
+status:
+  recommendedVersion: '{{ .Values.kubefed.version }}'
