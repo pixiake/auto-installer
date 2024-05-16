@@ -52,8 +52,13 @@ sed -i "s/REPLACE_ME_DMP/$dmp/g" kse-extensions/kustomization.yaml
 # 使用 kustomize 生成 installplan 并应用
 kubectl kustomize kse-extensions | kubectl apply -f -
 
-# 等待所有的 InstallPlan Ready
-kubectl wait --for=condition=Installed --timeout=600s installplan --all
+# 根据 annotation （kubesphere.io/installation-mode=Multicluster）以及annotation （app=chart）筛选 installplan
+installplans=$(kubectl get installplan -o jsonpath='{.items[?(@.status.clusterSchedulingStatuses.'$CLUSTER_NAME')].metadata.name}')
+
+# 遍历 installplans，等待所有的 installplan Ready
+for installplan in $installplans; do
+  kubectl wait --for=jsonpath='{.status.clusterSchedulingStatuses.'$CLUSTER_NAME'.state}'=Installed --timeout=600s installplan/$installplan
+done
 
 # 使用 kubectl patch 更新 kse-extensions-cluster-record
 kubectl patch cm kse-extensions-cluster-record -n kubesphere-system --type merge -p "{\"data\":{\"common\":\"$common\",\"dmp\":\"$dmp\"}}"
