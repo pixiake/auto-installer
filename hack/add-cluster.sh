@@ -22,7 +22,13 @@ if [ -z "$CLUSTER_ROLE" ]; then
 fi
 
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
-export KUBECONFIG=clusters/host/host-kubeconfig.yaml
+if [ "$CLUSTER_ROLE" == "host" ]; then
+   # 设置 KUBECONFIG 为新建集群的 kubeconfig
+   export KUBECONFIG=clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml
+else
+   # 设置 KUBECONFIG 为 host 集群的 kubeconfig
+   export KUBECONFIG=clusters/host/host-kubeconfig.yaml
+fi
 
 function member_cluster() {
   # 1. 创建 cluster
@@ -66,6 +72,7 @@ function host_cluster() {
   helm upgrade --install -n kubesphere-system --create-namespace ks-core charts/ks-core \
        --debug \
        --wait \
+       --set hostClusterName=${CLUSTER_NAME} \
        --set global.imageRegistry=${IMAGE_REGISTRY},extension.imageRegistry=${IMAGE_REGISTRY}
 
   # 2. 发布扩展组件
