@@ -76,6 +76,7 @@ function host_cluster() {
        --set global.imageRegistry=${IMAGE_REGISTRY},extension.imageRegistry=${IMAGE_REGISTRY}
 
   # 2. 发布扩展组件
+  pwd
   helm template -n kubesphere-system charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
 
   # 3. 检查并创建 configmap kse-extensions-cluster-record
