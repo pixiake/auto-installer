@@ -3,9 +3,9 @@
 set -x
 set -e
 
-# 如果没有传入 CLUSTER_NAME 退出
-if [ -z "$CLUSTER_NAME" ]; then
-  echo "Usage: CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
+# 如果没有传入 K8S_ 退出
+if [ -z "$K8S_CLUSTER_NAME" ]; then
+  echo "Usage: K8S_CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
   exit 1
 fi
 
@@ -28,20 +28,20 @@ fi
 common=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonpath='{.data.common}')
 dmp=$(kubectl get cm kse-extensions-cluster-record -n kubesphere-system -o jsonpath='{.data.dmp}')
 
-# 添加 CLUSTER_NAME 到 common
+# 添加 K8S_CLUSTER_NAME 到 common
 if [ -z "$common" ]; then
-  common=$CLUSTER_NAME
-elif [[ ! $common =~ (^|,)$CLUSTER_NAME(,|$) ]]; then
-  common=$common,$CLUSTER_NAME
+  common=$K8S_CLUSTER_NAME
+elif [[ ! $common =~ (^|,)$K8S_CLUSTER_NAME(,|$) ]]; then
+  common=$common,$K8S_CLUSTER_NAME
 fi
 
 # 如果 CLUSTER_ROLE 为 dmp, 则添加 dmp
 if [ "$CLUSTER_ROLE" == "dmp" ]; then
-  # 添加 CLUSTER_NAME 到 dmp
+  # 添加 K8S_CLUSTER_NAME 到 dmp
   if [ -z "$dmp" ]; then
-    dmp=$CLUSTER_NAME
-  elif [[ ! $dmp =~ (^|,)$CLUSTER_NAME(,|$) ]]; then
-    dmp=$dmp,$CLUSTER_NAME
+    dmp=$K8S_CLUSTER_NAME
+  elif [[ ! $dmp =~ (^|,)$K8S_CLUSTER_NAME(,|$) ]]; then
+    dmp=$dmp,$K8S_CLUSTER_NAME
   fi
 fi
 
@@ -53,11 +53,11 @@ sed -i "s/REPLACE_ME_DMP/$dmp/g" kse-extensions/kustomization.yaml
 kubectl kustomize kse-extensions | kubectl apply -f -
 
 # 根据 annotation （kubesphere.io/installation-mode=Multicluster）以及annotation （app=chart）筛选 installplan
-installplans=$(kubectl get installplan -o jsonpath='{.items[?(@.status.clusterSchedulingStatuses.'$CLUSTER_NAME')].metadata.name}')
+installplans=$(kubectl get installplan -o jsonpath='{.items[?(@.status.clusterSchedulingStatuses.'$K8S_CLUSTER_NAME')].metadata.name}')
 
 # 遍历 installplans，等待所有的 installplan Ready
 for installplan in $installplans; do
-  kubectl wait --for=jsonpath='{.status.clusterSchedulingStatuses.'$CLUSTER_NAME'.state}'=Installed --timeout=600s installplan/$installplan
+  kubectl wait --for=jsonpath='{.status.clusterSchedulingStatuses.'$K8S_CLUSTER_NAME'.state}'=Installed --timeout=600s installplan/$installplan
 done
 
 # 使用 kubectl patch 更新 kse-extensions-cluster-record

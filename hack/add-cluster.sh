@@ -3,9 +3,9 @@
 set -x
 set -e
 
-# 如果没有传入 CLUSTER_NAME 退出
-if [ -z "$CLUSTER_NAME" ]; then
-  echo "Usage: CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
+# 如果没有传入 K8S_CLUSTER_NAME 退出
+if [ -z "$K8S_CLUSTER_NAME" ]; then
+  echo "Usage: K8S_CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
   exit 1
 fi
 
@@ -21,10 +21,22 @@ if [ -z "$CLUSTER_ROLE" ]; then
   exit 1
 fi
 
+# 如果没有传入 K8S_CLUSTER_TYPE 退出
+if [ -z "$K8S_CLUSTER_TYPE" ]; then
+  echo "Usage: K8S_CLUSTER_TYPE=<k8s-cluster-type> ./add-cluster.sh"
+  exit 1
+fi
+
+# 如果没有传入 K8S_CLUSTER_ENV 退出
+if [ -z "$K8S_CLUSTER_ENV" ]; then
+  echo "Usage: K8S_CLUSTER_ENV=<k8s-cluster-env> ./add-cluster.sh"
+  exit 1
+fi
+
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
 if [ "$CLUSTER_ROLE" == "host" ]; then
    # 设置 KUBECONFIG 为新建集群的 kubeconfig
-   export KUBECONFIG=clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml
+   export KUBECONFIG=clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
 else
    # 设置 KUBECONFIG 为 host 集群的 kubeconfig
    export KUBECONFIG=clusters/host/host-kubeconfig.yaml
@@ -55,16 +67,22 @@ EOF
 apiVersion: cluster.kubesphere.io/v1alpha1
 kind: Cluster
 metadata:
-  name: ${CLUSTER_NAME}
+  annotations:
+    kubesphere.io/description: ${K8S_CLUSTER_NAME}
+  labels:
+    cluster.kubesphere.io/group: ${K8S_CLUSTER_ENV}
+  name: ${K8S_CLUSTER_NAME}
 spec:
   config: $config
   connection:
     type: direct
-    kubeconfig: $(cat clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml | base64 -w 0)
+    kubeconfig: $(cat clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml | base64 -w 0)
+  joinFederation: true
+  provider: ${K8S_CLUSTER_TYPE}
 EOF
 
   # 2. 等待 cluster Ready
-  kubectl wait cluster/${CLUSTER_NAME} --for=condition=Ready --timeout=120s
+  kubectl wait cluster/${K8S_CLUSTER_NAME} --for=condition=Ready --timeout=120s
 }
 
 function host_cluster() {
@@ -72,11 +90,10 @@ function host_cluster() {
   helm upgrade --install ks-core charts/ks-core --namespace kubesphere-system --create-namespace \
        --debug \
        --wait \
-       --set hostClusterName=${CLUSTER_NAME} \
+       --set hostClusterName=${K8S_CLUSTER_NAME} \
        --set global.imageRegistry=${IMAGE_REGISTRY},extension.imageRegistry=${IMAGE_REGISTRY}
 
   # 2. 发布扩展组件
-  pwd
   helm template -n kubesphere-system charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
 
   # 3. 检查并创建 configmap kse-extensions-cluster-record
