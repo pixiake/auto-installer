@@ -15,9 +15,9 @@ if [ -z "$IMAGE_REGISTRY" ]; then
   exit 1
 fi
 
-# 如果没有传入 CLUSTER_ROLE 退出，CLUSTER_ROLE 可以是 member、host 或 dmp 之一
-if [ -z "$CLUSTER_ROLE" ]; then
-  echo "Usage: CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
+# 如果没有传入 K8S_CLUSTER_ROLE 退出，K8S_CLUSTER_ROLE 可以是 member、host 或 dmp 之一
+if [ -z "$K8S_CLUSTER_ROLE" ]; then
+  echo "Usage: K8S_CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
   exit 1
 fi
 
@@ -27,14 +27,14 @@ if [ -z "$K8S_CLUSTER_TYPE" ]; then
   exit 1
 fi
 
-# 如果没有传入 K8S_CLUSTER_ENV 退出
-if [ -z "$K8S_CLUSTER_ENV" ]; then
-  echo "Usage: K8S_CLUSTER_ENV=<k8s-cluster-env> ./add-cluster.sh"
+# 如果没有传入 CLOUD_ENV 退出
+if [ -z "$CLOUD_ENV" ]; then
+  echo "Usage: CLOUD_ENV=<k8s-cluster-env> ./add-cluster.sh"
   exit 1
 fi
 
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
-if [ "$CLUSTER_ROLE" == "host" ]; then
+if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
    # 设置 KUBECONFIG 为新建集群的 kubeconfig
    export KUBECONFIG=clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
 else
@@ -70,7 +70,7 @@ metadata:
   annotations:
     kubesphere.io/description: ${K8S_CLUSTER_NAME}
   labels:
-    cluster.kubesphere.io/group: ${K8S_CLUSTER_ENV}
+    cluster.kubesphere.io/group: ${CLOUD_ENV}
   name: ${K8S_CLUSTER_NAME}
 spec:
   config: $config
@@ -103,13 +103,13 @@ function host_cluster() {
   fi
 }
 
-# 如果 CLUSTER_ROLE 为 member, 则执行 member cluster 任务
-if [ "$CLUSTER_ROLE" == "member" ]; then
+# 如果 K8S_CLUSTER_ROLE 为 member, 则执行 member cluster 任务
+if [ "$K8S_CLUSTER_ROLE" == "member" ]; then
   member_cluster
 fi
 
-# 如果 CLUSTER_ROLE 为 host, 则执行 host cluster 任务
-if [ "$CLUSTER_ROLE" == "host" ]; then
+# 如果 K8S_CLUSTER_ROLE 为 host, 则执行 host cluster 任务
+if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
   host_cluster
 fi
 

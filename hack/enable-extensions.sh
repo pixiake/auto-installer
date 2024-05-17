@@ -5,13 +5,13 @@ set -e
 
 # 如果没有传入 K8S_ 退出
 if [ -z "$K8S_CLUSTER_NAME" ]; then
-  echo "Usage: K8S_CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
+  echo "Usage: K8S_CLUSTER_NAME=<cluster-name> ./enable-extensions.sh"
   exit 1
 fi
 
-# 如果没有传入 CLUSTER_ROLE 退出，CLUSTER_ROLE 可以是 member、host 或 dmp 之一
-if [ -z "$CLUSTER_ROLE" ]; then
-  echo "Usage: CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
+# 如果没有传入 K8S_CLUSTER_ROLE 退出，K8S_CLUSTER_ROLE 可以是 member、host 或 dmp 之一
+if [ -z "$K8S_CLUSTER_ROLE" ]; then
+  echo "Usage: K8S_CLUSTER_ROLE=<cluster-role> ./enable-extensions.sh"
   exit 1
 fi
 
@@ -35,8 +35,8 @@ elif [[ ! $common =~ (^|,)$K8S_CLUSTER_NAME(,|$) ]]; then
   common=$common,$K8S_CLUSTER_NAME
 fi
 
-# 如果 CLUSTER_ROLE 为 dmp, 则添加 dmp
-if [ "$CLUSTER_ROLE" == "dmp" ]; then
+# 如果 K8S_CLUSTER_ROLE 为 dmp, 则添加 dmp
+if [ "$K8S_CLUSTER_ROLE" == "dmp" ]; then
   # 添加 K8S_CLUSTER_NAME 到 dmp
   if [ -z "$dmp" ]; then
     dmp=$K8S_CLUSTER_NAME
