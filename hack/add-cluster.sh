@@ -69,7 +69,7 @@ EOF
 
 function host_cluster() {
   # 1. 安装 ks-core
-  helm upgrade --install -n kubesphere-system --create-namespace ks-core charts/ks-core \
+  helm upgrade --install ks-core charts/ks-core -n kubesphere-system --create-namespace \
        --debug \
        --wait \
        --set hostClusterName=${CLUSTER_NAME} \

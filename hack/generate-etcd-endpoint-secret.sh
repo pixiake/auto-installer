@@ -8,8 +8,19 @@ if [ -z "$CLUSTER_NAME" ]; then
   exit 1
 fi
 
+# 如果没有传入 CLUSTER_ROLE 退出
+if [ -z "$CLUSTER_ROLE" ]; then
+  echo "Usage: CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
+  exit 1
+fi
+
 # 设置 KUBECONFIG 为新建集群的 kubeconfig
 export KUBECONFIG=clusters/${CLUSTER_NAME}/${CLUSTER_NAME}-kubeconfig.yaml
+
+# 如果 CLUSTER_ROLE 为 host，则创建 kubesphere-system namespace
+if [ "$CLUSTER_ROLE" == "host" ]; then
+  kubectl create ns kubesphere-system
+fi
 
 # 1. 创建 etcd-endpoint-secret-generator job
 kubectl apply -f etcd-endpoint-secret-generator.yaml
