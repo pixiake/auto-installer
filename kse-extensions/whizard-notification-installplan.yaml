@@ -1,0 +1,14 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: InstallPlan
+metadata:
+  name: whizard-notification
+spec:
+  enabled: true
+  extension:
+    name: whizard-notification
+    version: 2.5.6
+  config: |
+    alertmanager:
+      persistence:
+        storageClassName: REPLACE_ME_STORAGE_CLASS
+    

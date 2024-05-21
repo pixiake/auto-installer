@@ -1,0 +1,18 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: InstallPlan
+metadata:
+  annotations:
+    kubesphere.io/installation-mode: "Multicluster"
+  name: vector
+spec:
+  enabled: true
+  extension:
+    name: vector
+    version: 1.0.0
+  config: |
+    aggregator:
+      persistence:
+        storageClassName: REPLACE_ME_STORAGE_CLASS
+  clusterScheduling:
+    placement:
+      clusters: []

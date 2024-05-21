@@ -1,0 +1,53 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: InstallPlan
+metadata:
+  annotations:
+    kubesphere.io/installation-mode: "Multicluster"
+  name: whizard-monitoring
+spec:
+  enabled: true
+  extension:
+    name: whizard-monitoring
+    version: 1.0.0
+  config: |
+    kube-prometheus-stack:
+      kubeEtcd:
+        enabled: true
+      prometheus:
+        prometheusSpec:
+          secrets:
+          - kube-etcd-client-certs
+    whizard-monitoring-helper:
+      etcdMonitoringHelper:
+        enabled: true
+    whizard:    
+      selfMonitor:
+        enabled: true
+      service:
+        storage:
+          namespace: kubesphere-monitoring-system
+          name: remote
+        compactorTemplateSpec:
+          dataVolume:
+            persistentVolumeClaim:
+              spec:
+                storageClassName: REPLACE_ME_STORAGE_CLASS
+        ingesterTemplateSpec:
+          dataVolume:
+            persistentVolumeClaim:
+              spec:
+                storageClassName: REPLACE_ME_STORAGE_CLASS
+        storeTemplateSpec:
+          dataVolume:
+            persistentVolumeClaim:
+              spec:
+                storageClassName: REPLACE_ME_STORAGE_CLASS
+      ingester:
+        additionalConfig:
+          dataVolume:
+            persistentVolumeClaim:
+              spec:
+                storageClassName: REPLACE_ME_STORAGE_CLASS
+  clusterScheduling:
+    placement:
+      clusters: []

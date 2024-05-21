@@ -8,18 +8,19 @@ spec:
   enabled: true
   extension:
     name: dmp
-    version: 2.1.0
-  config: |-
+    version: 2.1.2
+  config: |
     global:
       imageRegistry: docker.io
       imagePullSecrets: [ ]
+      storageClass: ""
     
     
     extension:
       frontend:
         image:
           repository: radondb/dmp-frontend
-          tag: "2.1.0"
+          tag: "2.1.1"
         resources:
           limits:
             cpu: 200m
@@ -32,7 +33,7 @@ spec:
       dmp:
         image:
           repository: radondb/dmp
-          tag: "2.1.0"
+          tag: "2.1.1"
         resources:
           limits:
             cpu: 200m
@@ -42,5 +43,4 @@ spec:
             memory: 300Mi
   clusterScheduling:
     placement:
-      clusters:
-      - host
+      clusters: []

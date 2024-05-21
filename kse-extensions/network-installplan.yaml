@@ -9,7 +9,7 @@ spec:
   extension:
     name: network
     version: 1.0.0
-  config: |-
+  config: |
     global:
       # will override the all registry and tag if set
       imageRegistry: # registry.cn-beijing.aliyuncs.com
@@ -50,5 +50,4 @@ spec:
     
   clusterScheduling:
     placement:
-      clusters:
-      - host
+      clusters: []

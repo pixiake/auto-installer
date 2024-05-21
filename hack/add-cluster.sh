@@ -3,47 +3,56 @@
 set -x
 set -e
 
+base_path=$(pwd)
+
+export K8S_CLUSTER_NAME=$cluster_name
+export IMAGE_REGISTRY="hub.kubesphere.com.cn"
+export K8S_CLUSTER_ROLE=$kse_type
+export K8S_CLUSTER_TYPE=$cluster_type
+export CLOUD_ENV=$cloud_env
+export STORAGE_CLASS=$storage_class
+
 # 如果没有传入 K8S_CLUSTER_NAME 退出
 if [ -z "$K8S_CLUSTER_NAME" ]; then
-  echo "Usage: K8S_CLUSTER_NAME=<cluster-name> ./add-cluster.sh"
+  echo "K8S_CLUSTER_NAME is required"
   exit 1
 fi
 
 # 如果没有传入 IMAGE_REGISTRY 退出
 if [ -z "$IMAGE_REGISTRY" ]; then
-  echo "Usage: IMAGE_REGISTRY=<image-registry> ./add-cluster.sh"
+  echo "IMAGE_REGISTRY is required"
   exit 1
 fi
 
 # 如果没有传入 K8S_CLUSTER_ROLE 退出，K8S_CLUSTER_ROLE 可以是 member、host 或 dmp 之一
 if [ -z "$K8S_CLUSTER_ROLE" ]; then
-  echo "Usage: K8S_CLUSTER_ROLE=<cluster-role> ./add-cluster.sh"
+  echo "K8S_CLUSTER_ROLE is required"
   exit 1
 fi
 
 # 如果没有传入 K8S_CLUSTER_TYPE 退出
 if [ -z "$K8S_CLUSTER_TYPE" ]; then
-  echo "Usage: K8S_CLUSTER_TYPE=<k8s-cluster-type> ./add-cluster.sh"
+  echo "K8S_CLUSTER_TYPE is required"
   exit 1
 fi
 
 # 如果没有传入 CLOUD_ENV 退出
 if [ -z "$CLOUD_ENV" ]; then
-  echo "Usage: CLOUD_ENV=<k8s-cluster-env> ./add-cluster.sh"
+  echo "CLOUD_ENV is required"
   exit 1
 fi
 
 # 设置 KUBECONFIG 为 host 集群的 kubeconfig
 if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
    # 设置 KUBECONFIG 为新建集群的 kubeconfig
-   export KUBECONFIG=clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
+   export KUBECONFIG=$base_path/clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
 else
    # 设置 KUBECONFIG 为 host 集群的 kubeconfig
-   export KUBECONFIG=clusters/host/host-kubeconfig.yaml
+   export KUBECONFIG=$base_path/clusters/host/host-kubeconfig.yaml
 fi
 
 function member_cluster() {
-  # 1. 创建 cluster
+  # 创建 cluster
   config=$(cat <<EOF | base64 -w 0
 global:
   imageRegistry: ${IMAGE_REGISTRY}
@@ -81,36 +90,36 @@ spec:
   provider: ${K8S_CLUSTER_TYPE}
 EOF
 
-  # 2. 等待 cluster Ready
-  kubectl wait cluster/${K8S_CLUSTER_NAME} --for=condition=Ready --timeout=120s
+  # 等待 cluster Ready
+  kubectl wait cluster/${K8S_CLUSTER_NAME} --for=condition=Ready --timeout=300s
 }
 
 function host_cluster() {
-  # 1. 安装 ks-core
-  helm upgrade --install ks-core charts/ks-core --namespace kubesphere-system --create-namespace \
+  # 安装 ks-core
+  helm upgrade --install ks-core $base_path/charts/ks-core --namespace kubesphere-system --create-namespace \
        --debug \
        --wait \
        --set hostClusterName=${K8S_CLUSTER_NAME} \
        --set global.imageRegistry=${IMAGE_REGISTRY},extension.imageRegistry=${IMAGE_REGISTRY}
 
-  # 2. 发布扩展组件
-  helm template -n kubesphere-system charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
+  # 发布扩展组件
+  helm template -n kubesphere-system $base_path/charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
 
-  # 3. 检查并创建 configmap kse-extensions-cluster-record
-  if ! kubectl get cm kse-extensions-cluster-record -n kubesphere-system &> /dev/null; then
-      # 如果不存在则创建
-      kubectl create cm kse-extensions-cluster-record -n kubesphere-system --from-literal=common="" --from-literal=dmp=""
-  fi
+  # 设置 storage class
+  find $base_path/kse-extensions -type f -exec sed -i "s/REPLACE_ME_STORAGE_CLASS/${STORAGE_CLASS}/g" {} \;
+
+  # 安装扩展组件
+  kubectl apply -f $base_path/kse-extensions
+
+  # 等待所有扩展组件 Ready
+  kubectl wait --for=condition=Installed --timeout=600s installplan --all
 }
-
-# 如果 K8S_CLUSTER_ROLE 为 member, 则执行 member cluster 任务
-if [ "$K8S_CLUSTER_ROLE" == "member" ]; then
-  member_cluster
-fi
 
 # 如果 K8S_CLUSTER_ROLE 为 host, 则执行 host cluster 任务
 if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
   host_cluster
+else
+  member_cluster
 fi
 
 # 更新 Application CRD

@@ -1,0 +1,20 @@
+apiVersion: kubesphere.io/v1alpha1
+kind: InstallPlan
+metadata:
+  annotations:
+    kubesphere.io/installation-mode: "Multicluster"
+  name: dmp
+spec:
+  enabled: true
+  extension:
+    name: dmp
+    version: 2.1.0
+  config: {}
+  clusterScheduling:
+    overrides:
+      test-member01:
+        global:
+          storageClass: "ecatycc-iscsi-az2"
+    placement:
+      clusters:
+      - host

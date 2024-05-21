@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kse-extensions-cluster-record
-  namespace: kubesphere-system
-data:
-  common: ""
-  dmp: ""
