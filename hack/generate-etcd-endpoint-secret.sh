@@ -5,6 +5,9 @@ set -e
 
 base_path=$(pwd)
 
+export K8S_CLUSTER_NAME=$cluster_name
+export K8S_CLUSTER_ROLE=$kse_type
+
 # 如果没有传入 K8S_CLUSTER_NAME 退出
 if [ -z "$K8S_CLUSTER_NAME" ]; then
   echo "K8S_CLUSTER_NAME is required"
