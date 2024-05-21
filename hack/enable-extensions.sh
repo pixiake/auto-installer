@@ -89,17 +89,17 @@ EOF
 for extension in ${extensions[@]}; do
   case $extension in
     "whizard-monitoring")
-      new_clusters=$(kubectl get installplan whizard-monitoring -o json | jq -r -c '.spec.clusterScheduling.placement.clusters + ["$K8S_CLUSTER_NAME"]')
+      new_clusters=$(kubectl get installplan whizard-monitoring -o json | jq -r -c ".spec.clusterScheduling.placement.clusters + [\"$K8S_CLUSTER_NAME\"]")
       sed -i "s/REPLACE_ME_CLUSTERS/$new_clusters/g" $base_path/whizard-monitoring-patch.yaml
       kubectl patch installplan whizard-monitoring --type merge --patch-file $base_path/whizard-monitoring-patch.yaml
       ;;
     "devops")
-      new_clusters=$(kubectl get installplan devops -o json | jq -r -c '.spec.clusterScheduling.placement.clusters + ["$K8S_CLUSTER_NAME"]')
+      new_clusters=$(kubectl get installplan devops -o json | jq -r -c ".spec.clusterScheduling.placement.clusters + [\"$K8S_CLUSTER_NAME\"]")
       sed -i "s/REPLACE_ME_CLUSTERS/$new_clusters/g" $base_path/devops-patch.yaml
       kubectl patch installplan devops --type merge --patch-file $base_path/devops-patch.yaml
       ;;
     "dmp")
-      new_clusters=$(kubectl get installplan dmp -o json | jq -r -c '.spec.clusterScheduling.placement.clusters + ["$K8S_CLUSTER_NAME"]')
+      new_clusters=$(kubectl get installplan dmp -o json | jq -r -c ".spec.clusterScheduling.placement.clusters + [\"$K8S_CLUSTER_NAME\"]")
       sed -i "s/REPLACE_ME_CLUSTERS/$new_clusters/g" $base_path/dmp-patch.yaml
       kubectl patch installplan dmp --type merge --patch-file $base_path/dmp-patch.yaml
       ;;
@@ -111,7 +111,7 @@ spec:
     placement:
       clusters: REPLACE_ME_CLUSTERS
 EOF
-      new_clusters=$(kubectl get installplan $extension -o json | jq -r -c '.spec.clusterScheduling.placement.clusters + ["$K8S_CLUSTER_NAME"]')
+      new_clusters=$(kubectl get installplan $extension -o json | jq -r -c ".spec.clusterScheduling.placement.clusters + [\"$K8S_CLUSTER_NAME\"]")
       sed -i "s/REPLACE_ME_CLUSTERS/$new_clusters/g" $base_path/$extension-patch.yaml
       kubectl patch installplan $extension --type merge --patch-file $base_path/$extension-patch.yaml
       ;;

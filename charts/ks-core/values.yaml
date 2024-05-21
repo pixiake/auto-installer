@@ -194,7 +194,7 @@ controller:
   image:
     registry: ""
     repository: kse/ks-controller-manager
-    tag: ""
+    tag: "v4.1.0-20240506-1"
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally, specify an array of imagePullSecrets.
