@@ -24,9 +24,9 @@ fi
 export KUBECONFIG=$base_path/clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
 
 # 如果 K8S_CLUSTER_ROLE 为 host，则创建 kubesphere-system namespace
-if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
-  kubectl create ns kubesphere-system
-fi
+#if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
+#  kubectl create ns kubesphere-system
+#fi
 
 # 创建 etcd-endpoint-secret-generator job
 kubectl apply -f etcd-endpoint-secret-generator.yaml
