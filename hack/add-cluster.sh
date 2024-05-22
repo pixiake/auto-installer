@@ -105,6 +105,9 @@ function host_cluster() {
   # 发布扩展组件
   helm template -n kubesphere-system $base_path/charts/kse-extensions-publish --set museum.enabled=true,global.imageRegistry=${IMAGE_REGISTRY} | kubectl apply -f -
 
+  # 等待 extensions-museum 启动
+  kubectl wait --for=condition=available --timeout=600s -n kubesphere-system  deploy/extensions-museum
+
   # 设置 storage class
   find $base_path/kse-extensions -type f -exec sed -i "s/REPLACE_ME_STORAGE_CLASS/${STORAGE_CLASS}/g" {} \;
 

@@ -36,8 +36,14 @@ elif [ "$K8S_CLUSTER_ROLE" == "dmp member" ]; then
   extensions+=("dmp")
 fi
 
-### 设置 KUBECONFIG 为 host 集群的 kubeconfig
-export KUBECONFIG=$base_path/clusters/host/host-kubeconfig.yaml
+# 设置 KUBECONFIG 为 host 集群的 kubeconfig
+if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
+   # 设置 KUBECONFIG 为新建集群的 kubeconfig
+   export KUBECONFIG=$base_path/clusters/${K8S_CLUSTER_NAME}/${K8S_CLUSTER_NAME}-kubeconfig.yaml
+else
+   # 设置 KUBECONFIG 为 host 集群的 kubeconfig
+   export KUBECONFIG=$base_path/clusters/host/host-kubeconfig.yaml
+fi
 
 ### 创建 devops patch，该 patch 主要用于配置新建集群 devops 的存储类
 cat <<EOF > $base_path/devops-patch.yaml
