@@ -93,6 +93,13 @@ EOF
 
 ### 遍历 extensions，根据不同的 extension 创建 patch
 for extension in ${extensions[@]}; do
+  ### 检查当前集群是否已经在对应 extension 的 installplan 中，如果已存在，则跳过
+  cluster_check=$(kubectl get installplan $extension -o jsonpath='{.spec.clusterScheduling.placement.clusters}' | jq ".[] | select(. == \"$K8S_CLUSTER_NAME\")")
+  if [ -n "$pod_info" ]; then
+    echo "cluster ${K8S_CLUSTER_NAME} 已开启 $extension ！"
+    continue
+  fi
+
   case $extension in
     "whizard-monitoring")
       new_clusters=$(kubectl get installplan whizard-monitoring -o json | jq -r -c ".spec.clusterScheduling.placement.clusters + [\"$K8S_CLUSTER_NAME\"] | unique")

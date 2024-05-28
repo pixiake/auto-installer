@@ -118,6 +118,13 @@ function host_cluster() {
   kubectl wait --for=condition=Installed --timeout=600s installplan --all
 }
 
+# 检查集群是否存在
+cluster_info=$(kubectl get pod ${K8S_CLUSTER_NAME} --ignore-not-found)
+if [ -n "$pod_info" ]; then
+    echo "cluster ${K8S_CLUSTER_NAME} 已存在 ！"
+    exit 0
+fi
+
 # 如果 K8S_CLUSTER_ROLE 为 host, 则执行 host cluster 任务
 if [ "$K8S_CLUSTER_ROLE" == "host" ]; then
   host_cluster
